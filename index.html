@@ -25,7 +25,7 @@
     <meta property="og:description"
         content="Especialistas en la resolución de conflictos legales con eficiencia y profesionalismo. Agenda tu cita sin costo.">
     <meta property="og:url" content="https://www.castrofirmalegal.ec">
-    <meta property="og:image" content="assets/img/og-image.png">
+    <meta property="og:image" content="https://www.castrofirmalegal.ec/assets/img/og-image.png">
     <meta property="og:image:width" content="1200">
     <meta property="og:image:height" content="630">
     <meta property="og:image:alt" content="Castro Firma Legal - Abg. Richard Castro">
@@ -36,7 +36,7 @@
     <meta name="twitter:title" content="Castro Firma Legal | Abg. Richard Castro">
     <meta name="twitter:description"
         content="Defensa jurídica firme y ética en Ecuador. Acción de Protección, Derecho Constitucional, Familia, Civil y Penal.">
-    <meta name="twitter:image" content="assets/img/og-image.png">
+    <meta name="twitter:image" content="https://www.castrofirmalegal.ec/assets/img/og-image.png">
 
     <!-- Schema.org / JSON-LD (Estructura de Datos para Google Rich Snippets) -->
     <script type="application/ld+json">
@@ -117,6 +117,8 @@
             line-height: 1.6;
             background-color: var(--light-bg);
             overflow-x: hidden;
+            /* Compensación para navbar fijo (fixed) */
+            padding-top: var(--navbar-height, 60px);
         }
 
         h1,
@@ -164,16 +166,21 @@
             font-weight: 600;
         }
 
-        /* Navbar */
+        /* Navbar ─ fixed para que el hide/show funcione correctamente */
         .navbar {
             background-color: var(--primary);
             color: var(--text-light);
             padding: 15px 0;
-            position: sticky;
+            position: fixed;
             top: 0;
+            left: 0;
+            width: 100%;
             z-index: 1000;
             box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
-            transition: var(--transition);
+            /* La transición de transform se aplica desde JS */
+            transition: transform 0.38s cubic-bezier(0.25, 0.46, 0.45, 0.94),
+                        box-shadow 0.3s ease,
+                        padding 0.3s ease;
         }
 
         .nav-container {
@@ -706,6 +713,79 @@
             box-shadow: 0 10px 30px rgba(0, 0, 0, 0.05);
             position: relative;
         }
+
+        /* ── Carrusel móvil de testimonios ── */
+        .testimonials-carousel-wrap {
+            position: relative;
+        }
+
+        /* Dots de navegación (ocultos en desktop) */
+        .carousel-dots {
+            display: none;
+            justify-content: center;
+            gap: 10px;
+            margin-top: 28px;
+        }
+
+        .carousel-dot {
+            width: 10px;
+            height: 10px;
+            border-radius: 50%;
+            background: rgba(10, 22, 40, 0.2);
+            border: none;
+            cursor: pointer;
+            padding: 0;
+            transition: all 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
+        }
+
+        .carousel-dot.active {
+            background: var(--secondary);
+            width: 28px;
+            border-radius: 5px;
+        }
+
+        @media (max-width: 768px) {
+
+            .testimonials-carousel-wrap {
+                overflow: hidden; /* Ocultar slides que se salen del contenedor */
+                position: relative;
+                width: 100%;
+            }
+
+            /* El grid pasa a ser un flex-track de pantalla completa */
+            .testimonials-carousel-wrap .testimonials-grid {
+                display: flex;
+                flex-wrap: nowrap;
+                gap: 0;
+                padding-bottom: 4px;
+                width: 100%;
+                /* Sin scroll nativo: JS mueve el track con translateX */
+            }
+
+            /* Cada card ocupa exactamente el 100% del contenedor */
+            .testimonials-carousel-wrap .testimonial-card {
+                flex: 0 0 100% !important;
+                min-width: 100% !important;
+                width: 100% !important;
+                box-sizing: border-box;
+                /* Forzar visibilidad — el carrusel gestiona todo */
+                opacity: 0.45 !important;
+                transform: scale(0.95) !important;
+                transition: opacity 0.5s ease, transform 0.5s ease !important;
+                border-radius: 12px;
+            }
+
+            /* Slide activo: completamente visible */
+            .testimonials-carousel-wrap .testimonial-card.carousel-active {
+                opacity: 1 !important;
+                transform: scale(1) !important;
+            }
+
+            .carousel-dots {
+                display: flex;
+            }
+        }
+
 
         .testimonial-card::before {
             content: '\f10d';
@@ -1467,55 +1547,65 @@
                 <h2>Casos Resueltos</h2>
                 <p>Lo que dicen quienes han confiado la defensa de sus derechos en nuestro despacho.</p>
             </div>
-            <div class="testimonials-grid">
-                <div class="testimonial-card reveal">
-                    <div class="stars">
-                        <i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i
-                            class="fas fa-star"></i><i class="fas fa-star"></i>
+            <!-- Wrapper para el carrusel móvil -->
+            <div class="testimonials-carousel-wrap">
+                <div class="testimonials-grid" id="testimonials-track">
+                    <div class="testimonial-card carousel-active">
+                        <div class="stars">
+                            <i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i
+                                class="fas fa-star"></i><i class="fas fa-star"></i>
+                        </div>
+                        <p class="testimonial-text">"El Dr. Vega resolvió mi demanda de alimentos en tiempo récord. Fue
+                            claro en todo momento y el resultado final me dio mucha tranquilidad."</p>
+                        <div class="testimonial-author">
+                            <div class="author-info">
+                                <h4>María Fernanda G.</h4>
+                                <span>Caso de Familia</span>
+                            </div>
+                        </div>
                     </div>
-                    <p class="testimonial-text">"El Dr. Vega resolvió mi demanda de alimentos en tiempo récord. Fue
-                        claro en todo momento y el resultado final me dio mucha tranquilidad."</p>
-                    <div class="testimonial-author">
-                        <div class="author-info">
-                            <h4>María Fernanda G.</h4>
-                            <span>Caso de Familia</span>
+                    <div class="testimonial-card">
+                        <div class="stars">
+                            <i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i
+                                class="fas fa-star"></i><i class="fas fa-star"></i>
+                        </div>
+                        <p class="testimonial-text">"Gracias a su oportuna asesoría legal por un tema de despido, logré
+                            recuperar la liquidación justa que me correspondía. Un profesional muy honesto."</p>
+                        <div class="testimonial-author">
+                            <div class="author-info">
+                                <h4>Carlos P.</h4>
+                                <span>Caso Laboral</span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="testimonial-card">
+                        <div class="stars">
+                            <i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i
+                                class="fas fa-star"></i><i class="fas fa-star"></i>
+                        </div>
+                        <p class="testimonial-text">"El divorcio por mutuo acuerdo fue un trámite notarial muy ágil. El
+                            Dr.
+                            Vega se encargó de la partición de bienes evitando un conflicto desgastante."</p>
+                        <div class="testimonial-author">
+                            <div class="author-info">
+                                <h4>Susana V.</h4>
+                                <span>Divorcio &amp; Civil</span>
+                            </div>
                         </div>
                     </div>
                 </div>
-                <div class="testimonial-card reveal">
-                    <div class="stars">
-                        <i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i
-                            class="fas fa-star"></i><i class="fas fa-star"></i>
-                    </div>
-                    <p class="testimonial-text">"Gracias a su oportuna asesoría legal por un tema de despido, logré
-                        recuperar la liquidación justa que me correspondía. Un profesional muy honesto."</p>
-                    <div class="testimonial-author">
-                        <div class="author-info">
-                            <h4>Carlos P.</h4>
-                            <span>Caso Laboral</span>
-                        </div>
-                    </div>
-                </div>
-                <div class="testimonial-card reveal">
-                    <div class="stars">
-                        <i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i
-                            class="fas fa-star"></i><i class="fas fa-star"></i>
-                    </div>
-                    <p class="testimonial-text">"El divorcio por mutuo acuerdo fue un trámite notarial muy ágil. El Dr.
-                        Vega se encargó de la partición de bienes evitando un conflicto desgastante."</p>
-                    <div class="testimonial-author">
-                        <div class="author-info">
-                            <h4>Susana V.</h4>
-                            <span>Divorcio & Civil</span>
-                        </div>
-                    </div>
+                <!-- Indicadores (dots) -- solo visibles en móvil -->
+                <div class="carousel-dots" id="carousel-dots">
+                    <button class="carousel-dot active" data-index="0" aria-label="Testimonio 1"></button>
+                    <button class="carousel-dot" data-index="1" aria-label="Testimonio 2"></button>
+                    <button class="carousel-dot" data-index="2" aria-label="Testimonio 3"></button>
                 </div>
             </div>
         </div>
     </section>
 
     <!-- Preguntas Frecuentes (FAQ) -->
-    <section id="faq" class="section-padding" style="background-color: var(--light-bg); border-top: 1px solid #e0e0e0;">
+    <section id="faq" class="section-padding" style="background-color: var(--light-bg);">
         <div class="container">
             <div class="section-title reveal">
                 <h2>Preguntas Frecuentes</h2>
@@ -1759,17 +1849,125 @@
             });
         });
 
-        // Navbar fijo / sombra
+        // ── Navbar inteligente: se oculta al bajar, reaparece al subir ──
+        const navbar = document.querySelector('.navbar');
+        let lastScrollY = window.pageYOffset;
+
+        // Ajustar el padding-top del body según la altura real del navbar
+        function updateBodyPadding() {
+            document.body.style.paddingTop = navbar.offsetHeight + 'px';
+        }
+        updateBodyPadding();
+        window.addEventListener('resize', updateBodyPadding);
+
         window.addEventListener('scroll', () => {
-            const navbar = document.querySelector('.navbar');
-            if (window.scrollY > 50) {
+            const currentScrollY = window.pageYOffset;
+            const scrollingDown = currentScrollY > lastScrollY;
+
+            if (currentScrollY > 80) {
+                // Ocultar cuando baja, mostrar cuando sube
+                navbar.style.transform = scrollingDown ? 'translateY(-110%)' : 'translateY(0)';
                 navbar.style.boxShadow = '0 4px 15px rgba(0,0,0,0.4)';
                 navbar.style.padding = '10px 0';
             } else {
+                // Siempre visible en el top de la página
+                navbar.style.transform = 'translateY(0)';
                 navbar.style.boxShadow = '0 4px 10px rgba(0,0,0,0.1)';
                 navbar.style.padding = '15px 0';
             }
+
+            lastScrollY = currentScrollY;
         });
+
+        // ── Carrusel de Testimonios (solo activo en móvil) ──
+        const track = document.getElementById('testimonials-track');
+        const cards = track ? Array.from(track.querySelectorAll('.testimonial-card')) : [];
+        const dots = document.querySelectorAll('.carousel-dot');
+        let currentIndex = 0;
+        let touchStartX = 0;
+        let touchEndX = 0;
+        let isDragging = false;
+
+        function isMobile() {
+            return window.innerWidth <= 768;
+        }
+
+        function goToSlide(index) {
+            if (!isMobile() || cards.length === 0) return;
+
+            // Limitar índice
+            index = Math.max(0, Math.min(index, cards.length - 1));
+            currentIndex = index;
+
+            // Mover el track
+            const cardWidth = track.clientWidth;
+            track.style.transition = 'transform 0.55s cubic-bezier(0.25, 0.46, 0.45, 0.94)';
+            track.style.transform = `translateX(-${index * cardWidth}px)`;
+
+            // Actualizar clases de escala/opacidad
+            cards.forEach((card, i) => {
+                card.classList.toggle('carousel-active', i === index);
+            });
+
+            // Actualizar dots
+            dots.forEach((dot, i) => {
+                dot.classList.toggle('active', i === index);
+            });
+        }
+
+        // Click en dots
+        dots.forEach(dot => {
+            dot.addEventListener('click', () => {
+                goToSlide(+dot.dataset.index);
+            });
+        });
+
+        // Touch / Swipe
+        if (track) {
+            track.addEventListener('touchstart', e => {
+                touchStartX = e.touches[0].clientX;
+                isDragging = true;
+                track.style.transition = 'none'; // Desactivar transición durante drag
+            }, { passive: true });
+
+            track.addEventListener('touchmove', e => {
+                if (!isDragging || !isMobile()) return;
+                const delta = e.touches[0].clientX - touchStartX;
+                const base = currentIndex * track.clientWidth;
+                track.style.transform = `translateX(${-base + delta}px)`;
+            }, { passive: true });
+
+            track.addEventListener('touchend', e => {
+                touchEndX = e.changedTouches[0].clientX;
+                isDragging = false;
+                const diff = touchStartX - touchEndX;
+                if (Math.abs(diff) > 50) {
+                    goToSlide(diff > 0 ? currentIndex + 1 : currentIndex - 1);
+                } else {
+                    goToSlide(currentIndex); // Volver al slide actual si el drag fue pequeño
+                }
+            }, { passive: true });
+        }
+
+        // Reiniciar al cambiar tamaño de ventana
+        window.addEventListener('resize', () => {
+            if (!isMobile()) {
+                if (track) {
+                    track.style.transform = 'none';
+                    track.style.transition = 'none';
+                }
+                cards.forEach(c => c.classList.remove('carousel-active'));
+            } else {
+                goToSlide(currentIndex);
+            }
+        });
+
+        // Inicializar el carrusel al cargar la página en móvil
+        if (isMobile() && cards.length > 0) {
+            // Asegurarse que el primer slide está marcado como activo
+            cards[0].classList.add('carousel-active');
+            track.style.transform = 'translateX(0)';
+        }
 
         // Resaltar sección activa en el navbar
         const sections = document.querySelectorAll('section[id]');
